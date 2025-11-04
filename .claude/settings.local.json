@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "WebSearch",
+      "WebFetch(domain:grafana.com)",
+      "WebFetch(domain:jsonlines.org)",
+      "WebFetch(domain:github.com)",
+      "Bash(bun test)",
+      "Bash(bun index.ts)",
+      "Bash(cat:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "name": "@myorg/logger",
+  "version": "0.1.0",
+  "description": "A Bun-native logging library with console, file (JSONL), and Loki transport support",
+  "type": "module",
+  "main": "./src/index.ts",
+  "module": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": {
+      "import": "./src/index.ts",
+      "types": "./src/index.ts"
+    }
+  },
+  "scripts": {
+    "test": "bun test"
+  },
+  "keywords": [
+    "logger",
+    "logging",
+    "loki",
+    "grafana",
+    "jsonl",
+    "bun"
+  ],
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  }
+}
