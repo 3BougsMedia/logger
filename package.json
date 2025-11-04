@@ -1,5 +1,5 @@
 {
-  "name": "@myorg/logger",
+  "name": "@3bougsmedia/logger",
   "version": "0.1.0",
   "description": "A Bun-native logging library with console, file (JSONL), and Loki transport support",
   "type": "module",
