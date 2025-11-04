@@ -12,6 +12,11 @@
       "types": "./src/index.ts"
     }
   },
+  "files": [
+    "src",
+    "README.md",
+    "CLAUDE.md"
+  ],
   "scripts": {
     "test": "bun test"
   },
@@ -28,5 +33,13 @@
   },
   "peerDependencies": {
     "typescript": "^5"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/3BougsMedia/logger.git"
+  },
+  "bugs": {
+    "url": "https://github.com/3BougsMedia/logger/issues"
+  },
+  "homepage": "https://github.com/3BougsMedia/logger#readme"
 }
