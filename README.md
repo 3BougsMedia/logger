@@ -70,8 +70,31 @@ interface LoggerConfig {
 logger.debug("Debugging information", { trace: "xyz" });
 logger.info("Normal operation", { user: "alice" });
 logger.warn("Warning condition", { event: "high_memory" });
+
+// Error logging with metadata only
 logger.error("Error occurred", { event: "api_timeout", endpoint: "/users" });
+
+// Error logging with Error object (automatically extracts message, name, and stack)
+try {
+  // Some operation that might fail
+  await database.connect();
+} catch (err) {
+  // Pass Error as second parameter
+  logger.error("Database connection failed", err as Error, {
+    event: "db_error",
+    retries: 3,
+  });
+}
+
+// Error logging with just the Error object
+logger.error("Operation failed", new Error("Something went wrong"));
 ```
+
+The error logs will automatically include:
+- `error`: Error message
+- `errorName`: Error type (Error, TypeError, etc.)
+- `errorStack`: Full stack trace
+- Plus any additional metadata you provide
 
 ## Loki Integration
 

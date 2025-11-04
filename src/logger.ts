@@ -110,9 +110,32 @@ export class Logger {
 
   /**
    * Log error message
+   * @overload
    */
-  error(message: string, metadata?: Record<string, unknown>): void {
-    this.log("error", message, metadata);
+  error(message: string, error: Error, metadata?: Record<string, unknown>): void;
+  error(message: string, metadata?: Record<string, unknown>): void;
+  error(
+    message: string,
+    errorOrMetadata?: Error | Record<string, unknown>,
+    metadata?: Record<string, unknown>,
+  ): void {
+    let finalMetadata: Record<string, unknown> | undefined;
+
+    // Check if second param is an Error
+    if (errorOrMetadata instanceof Error) {
+      // Extract error information
+      finalMetadata = {
+        error: errorOrMetadata.message,
+        errorName: errorOrMetadata.name,
+        errorStack: errorOrMetadata.stack,
+        ...metadata, // Merge with additional metadata
+      };
+    } else {
+      // Second param is metadata
+      finalMetadata = errorOrMetadata;
+    }
+
+    this.log("error", message, finalMetadata);
   }
 
   /**

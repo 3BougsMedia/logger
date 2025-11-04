@@ -185,6 +185,75 @@ describe("Logger", () => {
     logger.info("Test");
     logger.error("Error");
   });
+
+  test("should handle Error objects in error logs", async () => {
+    const logger = createLogger({
+      service: "test-service",
+      file: testLogFile,
+      enableConsole: false,
+    });
+
+    const error = new Error("Something went wrong");
+    logger.error("Operation failed", error);
+
+    await logger.flush();
+
+    const content = readFileSync(testLogFile, "utf-8");
+    const log = JSON.parse(content.trim());
+
+    expect(log.message).toBe("Operation failed");
+    expect(log.error).toBe("Something went wrong");
+    expect(log.errorName).toBe("Error");
+    expect(log.errorStack).toBeDefined();
+    expect(log.errorStack).toContain("Something went wrong");
+  });
+
+  test("should handle Error objects with additional metadata", async () => {
+    const logger = createLogger({
+      service: "test-service",
+      file: testLogFile,
+      enableConsole: false,
+    });
+
+    const error = new Error("Database timeout");
+    logger.error("DB operation failed", error, {
+      event: "db_error",
+      query: "SELECT * FROM users",
+      retries: 3,
+    });
+
+    await logger.flush();
+
+    const content = readFileSync(testLogFile, "utf-8");
+    const log = JSON.parse(content.trim());
+
+    expect(log.message).toBe("DB operation failed");
+    expect(log.error).toBe("Database timeout");
+    expect(log.errorName).toBe("Error");
+    expect(log.errorStack).toBeDefined();
+    expect(log.event).toBe("db_error");
+    expect(log.query).toBe("SELECT * FROM users");
+    expect(log.retries).toBe(3);
+  });
+
+  test("should maintain backward compatibility without Error object", async () => {
+    const logger = createLogger({
+      service: "test-service",
+      file: testLogFile,
+      enableConsole: false,
+    });
+
+    logger.error("Simple error", { event: "test_error", code: 500 });
+
+    await logger.flush();
+
+    const content = readFileSync(testLogFile, "utf-8");
+    const log = JSON.parse(content.trim());
+
+    expect(log.message).toBe("Simple error");
+    expect(log.event).toBe("test_error");
+    expect(log.code).toBe(500);
+  });
 });
 
 describe("Timestamp utilities", () => {

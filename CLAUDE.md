@@ -155,8 +155,16 @@ const logger = createLogger({
 logger.debug("Debugging information", { trace: "xyz" });
 logger.info("Normal operation", { user: "alice" });
 logger.warn("Warning condition", { event: "high_memory" });
-logger.error("Error occurred", { event: "api_timeout", endpoint: "/users" });
+
+// Error logging - supports Error objects as second parameter
+logger.error("Database error", err, { event: "db_error", retries: 3 });
+logger.error("API failed", { event: "api_timeout", endpoint: "/users" });
 ```
+
+**Error Logging**: The `.error()` method has special handling for Error objects:
+- `error(message, error)` - Extracts error message, name, and stack trace
+- `error(message, error, metadata)` - Combines error info with additional metadata
+- `error(message, metadata)` - Standard logging (backward compatible)
 
 ### Graceful Shutdown
 ```typescript

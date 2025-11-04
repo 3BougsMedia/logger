@@ -16,9 +16,22 @@ const logger = createLogger({
 logger.info("Application started", { port: 3000 });
 logger.debug("Debug information", { userId: 123 });
 logger.warn("High memory usage detected", { event: "high_memory", usage: "85%" });
-logger.error("Database connection failed", {
-  event: "database_error",
-  error: "Connection timeout",
+
+// Error logging with Error object
+try {
+  throw new Error("Connection timeout");
+} catch (err) {
+  // Pass Error as second parameter
+  logger.error("Database connection failed", err as Error, {
+    event: "database_error",
+    retries: 3,
+  });
+}
+
+// Or without the Error object (backward compatible)
+logger.error("API request failed", {
+  event: "api_error",
+  endpoint: "/users",
 });
 
 // Flush logs before exit
